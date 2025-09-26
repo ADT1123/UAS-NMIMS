@@ -1,77 +1,100 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { gsap } from 'gsap';
 
 interface PreloaderProps {
   onComplete: () => void;
 }
 
-const Preloader = ({ onComplete }: PreloaderProps) => {
+const CleanPreloader = ({ onComplete }: PreloaderProps) => {
   const [progress, setProgress] = useState(0);
+  const preloaderRef = useRef<HTMLDivElement>(null);
+  const logoRef = useRef<HTMLImageElement>(null);
+  const pathRef = useRef<SVGPathElement>(null);
+  const counterRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const tl = gsap.timeline();
-    
-    // Progress bar animation
-    tl.to({}, {
-      duration: 2.5,
+
+    // Logo entrance
+    tl.fromTo(logoRef.current,
+      { 
+        opacity: 0,
+        y: 50,
+        scale: 0.9
+      },
+      {
+        opacity: 1,
+        y: 0,
+        scale: 1,
+        duration: 1.2,
+        ease: "back.out(1.4)"
+      }
+    )
+
+    // Connection line drawing
+    .fromTo(pathRef.current,
+      { strokeDasharray: "1000", strokeDashoffset: "1000" },
+      { strokeDashoffset: "0", duration: 2.5, ease: "power2.out" },
+      0.5
+    )
+
+    // Progress counter animation
+    .to({}, {
+      duration: 3,
       ease: "power2.out",
       onUpdate: function() {
-        const progress = Math.round(this.progress() * 100);
-        setProgress(progress);
+        const prog = Math.round(this.progress() * 100);
+        setProgress(prog);
       }
+    }, 0.8)
+
+    // Exit animation
+    .to([logoRef.current, '.connection-line', counterRef.current], {
+      y: -50,
+      opacity: 0,
+      duration: 1,
+      stagger: 0.15,
+      ease: "power2.in"
+    }, "+=0.5")
+
+    .to(preloaderRef.current, {
+      opacity: 0,
+      duration: 0.6,
+      onComplete: () => onComplete()
     });
 
-    // Name animation
-    tl.fromTo(".preloader-name", 
-      { opacity: 0, y: 50, filter: "blur(10px)" },
-      { opacity: 1, y: 0, filter: "blur(0px)", duration: 1 },
-      0.5
-    );
-
-    // ...existing code...
-
-    tl.to(".preloader", {
-      opacity: 0,
-      scale: 0.95,
-      duration: 1,
-      ease: "power2.inOut",
-      onComplete: () => {
-        onComplete();
-      }
-    }, "+=0.5");
-
-    return () => {
-      tl.kill();
-    };
+    return () => tl.kill();
   }, [onComplete]);
 
   return (
-    <div className="preloader fixed inset-0 z-50 flex items-center justify-center">
-      <div className="absolute inset-0 bg-gradient-to-br from-background via-background to-secondary"></div>
-      
-      {/* Floating orbs */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-1/4 left-1/4 w-32 h-32 rounded-full bg-primary/20 blur-3xl float"></div>
-        <div className="absolute bottom-1/4 right-1/4 w-24 h-24 rounded-full bg-accent/20 blur-3xl float-delayed"></div>
-        <div className="absolute top-1/2 right-1/3 w-20 h-20 rounded-full bg-neon-cyan/20 blur-3xl float"></div>
-      </div>
+<div 
+  ref={preloaderRef}
+  className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-gradient-to-b from-black to-gray-900"
 
-      <div className="relative z-10 text-center">
-      <div className="preloader-name mb-8 flex justify-center">
-  <img src="/logo-Photoroom.png" alt="Preloader Logo" className="h-24 md:h-40" />
-</div>
-        
-        <div className="w-64 h-1 bg-muted/20 rounded-full overflow-hidden">
-          <div 
-            className="preloader-progress h-full loading-bar"
-            style={{ width: `${progress}%` }}
-          ></div>
+>
+
+      {/* Logo */}
+      <img 
+        ref={logoRef}
+        src="/logo-Photoroom.png" 
+        alt="Team UAS Logo" 
+        className="h-24 md:h-32 mb-12 filter drop-shadow-lg"
+      />
+
+      {/* Progress Counter */}
+      <div 
+        ref={counterRef}
+        className="text-center"
+      >
+        <div className="text-6xl md:text-7xl font-bold text-white mb-2 font-mono tracking-wider">
+          {progress}%
         </div>
-        
-        <p className="mt-4 text-sm text-muted-foreground">{progress}%</p>
+        <div className="text-white/70 text-lg tracking-wide">
+          Preparing website...
+        </div>
       </div>
     </div>
   );
 };
 
-export default Preloader;
+export default CleanPreloader;
