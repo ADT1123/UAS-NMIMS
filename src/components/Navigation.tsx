@@ -59,9 +59,9 @@ const Navigation = () => {
                 e.preventDefault();
                 scrollToSection('#home');
               }}
-              className="text-2xl font-bold gradient-text hover:scale-105 transition-transform duration-300"
+              className="hover:scale-105 transition-transform duration-300"
             >
-              Aditya
+              <img src="/logo-Photoroom.png" alt="Logo" className="h-10 md:h-12" />
             </a>
 
             {/* Desktop Menu */}

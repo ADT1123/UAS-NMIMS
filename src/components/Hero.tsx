@@ -89,18 +89,17 @@ const Hero = () => {
           ref={titleRef}
           className="text-5xl md:text-7xl lg:text-8xl font-bold leading-tight mb-6"
         >
-          Hi, I'm{' '}
-          <span className="gradient-text">Aditya</span>
+          Team UAS NMIMS{' '}
+          <span className="gradient-text"></span>
           <br />
-          <span className="text-4xl md:text-6xl lg:text-7xl">Web Developer</span>
+          <span className="text-4xl md:text-6xl lg:text-7xl"></span>
         </h1>
         
         <p 
           ref={subtitleRef}
           className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-2xl mx-auto"
         >
-          Creating immersive digital experiences with cutting-edge technologies. 
-          Let's build something extraordinary together.
+          Developing cutting edge Drone Technologies.
         </p>
         
         <div ref={ctaRef} className="flex flex-col sm:flex-row gap-4 justify-center items-center">
@@ -108,7 +107,7 @@ const Hero = () => {
             size="lg" 
             className="bg-gradient-primary hover:scale-105 transition-transform duration-300 px-8 py-6 text-lg font-semibold pulse-glow"
           >
-            Hire Me
+            Follow us
           </Button>
           <Button 
             variant="outline" 

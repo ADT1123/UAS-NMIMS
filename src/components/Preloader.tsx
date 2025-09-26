@@ -28,12 +28,7 @@ const Preloader = ({ onComplete }: PreloaderProps) => {
       0.5
     );
 
-    // Complete animation
-    tl.to(".preloader-progress", {
-      width: "100%",
-      duration: 2,
-      ease: "power2.out"
-    }, 0);
+    // ...existing code...
 
     tl.to(".preloader", {
       opacity: 0,
@@ -62,9 +57,9 @@ const Preloader = ({ onComplete }: PreloaderProps) => {
       </div>
 
       <div className="relative z-10 text-center">
-        <h1 className="preloader-name text-6xl md:text-8xl font-bold gradient-text mb-8">
-          Aditya
-        </h1>
+      <div className="preloader-name mb-8 flex justify-center">
+  <img src="/logo-Photoroom.png" alt="Preloader Logo" className="h-24 md:h-40" />
+</div>
         
         <div className="w-64 h-1 bg-muted/20 rounded-full overflow-hidden">
           <div 
